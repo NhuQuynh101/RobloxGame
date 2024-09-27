@@ -3,26 +3,6 @@
   "tree": {
     "$className": "DataModel",
 
-    "ReplicatedStorage": {
-      "Shared": {
-        "$path": "src/shared"
-      }
-    },
-
-    "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
-      }
-    },
-
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/client"
-        }
-      }
-    },
-
     "Workspace": {
       "$properties": {
         "StreamingEnabled": true
@@ -50,6 +30,23 @@
         }
       }
     },
+    "ReplicatedStorage": {
+      "$className":"ReplicatedStorage",
+      "$path": "src/ReplicatedStorage"
+    },
+
+    "ServerScriptService": {
+      "$className":"ServerScriptService",
+      "$path": "src/ServerScriptService"
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "$className":"StarterPlayerScripts",
+        "$path": "src/StarterPlayerScripts"
+      }
+    },
+    
     "Lighting": {
       "$properties": {
         "Ambient": [
