@@ -59,7 +59,6 @@ function loadPlayerFolder(player)
 		local newFolder = folder:Clone()
 		newFolder.Parent = player
 	end
-	print("LoadPlayerFolder")
 end
 
 -- Get Emerals
@@ -94,19 +93,15 @@ function Achievements(player)
 				end
 			end
 			playerAchievement:SetAsync(player.UserId, currentAchievements)
-			print(currentAchievements)
 			updateAchievementsClient(player,currentAchievements)
 		else
 			playerAchievement:SetAsync(player.UserId, AchievementsData)
-			print(AchievementsData)
 			updateAchievementsClient(player,AchievementsData)
 		end
-		print("Achievements")
 	end
 end
 
 function updateAchievementsClient(player, AchievementsData)
-	print(AchievementsData)
 	for _, achievementType in pairs(AchievementsData) do
 		local typeFolder = Instance.new('Folder')
 		typeFolder.Parent = player.AchievementLibrary
@@ -118,7 +113,6 @@ function updateAchievementsClient(player, AchievementsData)
 		orderNum.Value = achievementType.order
 		
 		for _, achievement in pairs(achievementType) do
-			print(achievement)
 			if achievement ~= achievementType.groupName and achievement ~= achievementType.order then
 				local badge = Instance.new('StringValue')
 				badge.Name = tostring(achievement.name)
@@ -155,7 +149,6 @@ function updateAchievementsClient(player, AchievementsData)
 				image.Parent = badge
 			end
 
-			print("a")
 		end
 	end
 	
