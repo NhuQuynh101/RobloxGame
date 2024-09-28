@@ -243,6 +243,7 @@ remotes.EmeralsPurchase.OnServerEvent:Connect(function(player, price, itemList)
 				print('Saved Purchased Items')
 			end
 			remotes.UpdateEmerals:FireClient(player)
+			remotes.LoadItem:FireClient(player)
 		end
 	end
 end)
