@@ -23,7 +23,9 @@ function mainfunc (player)
 
 	-- function 
 	loadPlayerFolder(player)
+	getEmerals(player)
 	Achievements(player)
+	EmeralsItems(player)
 	
 	-- remotes
 end
@@ -65,16 +67,18 @@ end
 -- Get Emerals
 function getEmerals (player)
 	local success, currentEmerals = pcall(function()
-		return playerEmerals:GetAsync(player.UserID)
+		return playerEmerals:GetAsync(player.UserId)
 	end)
-
-	if playerEmerals ~= nil then
-		player.Emerals.Value = currentEmerals
-	else
-		playerEmerals:SetAsync(player.UserID, 0)
-		player.Emerals.Value = 0
+	if success then
+		if currentEmerals ~= nil then
+			player.Emerals.Value = currentEmerals
+		else
+			playerEmerals:SetAsync(player.UserId, 0)
+			player.Emerals.Value = 0
+		end
 	end
 	remotes.UpdateEmerals:FireClient(player)
+	print('Updated Emerals')
 end
 
 --Get Achievements
@@ -175,10 +179,10 @@ function EmeralsItems(player)
 			end
 
 			playerEmeralsItems:SetAsync(player.UserId, currentEmeralsItems)
-			updateAchievementsClient(player,currentEmeralsItems)
+			updateEmeralsItemsClient(player,currentEmeralsItems)
 		else
 			playerEmeralsItems:SetAsync(player.UserId, EmeralsItemsData)
-			updateAchievementsClient(player, EmeralsItemsData)
+			updateEmeralsItemsClient(player, EmeralsItemsData)
 		end
 	end
 end
@@ -206,7 +210,7 @@ function updateEmeralsItemsClient(player, EmeralsItemsData)
 		order.Parent = itemVar
 
 		local quanity = Instance.new('IntValue')
-		quanity.Name = 'quantity'
+		quanity.Name = 'quanity'
 		quanity.Value = emeralsItem.quanity
 		quanity.Parent = itemVar
 	end
@@ -222,7 +226,24 @@ remotes.EmeralsPurchase.OnServerEvent:Connect(function(player, price, itemList)
 	end)
 	if success then
 		player.Emerals.Value = updatedEmerals
-		
+		local success, currentEmeralsItems = pcall(function()
+			return playerEmeralsItems:GetAsync(player.UserId)			
+		end)
+		if success then
+			for _, item in pairs(itemList) do
+				currentEmeralsItems[item].quanity += 1
+			end
+			local success, error = pcall(function()
+				playerEmeralsItems:SetAsync(player.UserId, currentEmeralsItems)
+			end)
+			if success then
+				for _, item in pairs(currentEmeralsItems) do
+					player:WaitForChild('EmeralsItems'):WaitForChild(item.name).quanity.Value = item.quanity				
+				end
+				print('Saved Purchased Items')
+			end
+			remotes.UpdateEmerals:FireClient(player)
+		end
 	end
 end)
 
