@@ -7,7 +7,8 @@ local remotes = ReplicatedStorage.Remotes
 local playerInventory = dataStoreService:GetDataStore('playerInventory')
 local playerEmerals = dataStoreService:GetDataStore('playerInventory', 'Emerals')
 local playerAchievement = dataStoreService:GetDataStore('playerInventory', 'Achievement')
-local playerItems = dataStoreService:GetDataStore('playerInventory', 'Items')
+local playerEmeralsItems = dataStoreService:GetDataStore('playerInventory', 'EmeralsItems')
+local playerRobuxItems = dataStoreService:GetDataStore('playerInventory', 'RobuxItems')
 
 local attributeList = {
 	'Emerals',
@@ -156,8 +157,62 @@ function updateAchievementsClient(player, AchievementsData)
 	print("loaded")
 end
 
+--Get EmeralsItems
+function EmeralsItems(player)
+	local EmeralsItemsData = require(ReplicatedStorage.JSON.EmeralsItems)
+	local success, currentEmeralsItems = pcall(function()
+		return playerEmeralsItems:GetAsync(player.UserId)
+	end)
+	
+	if success then
+		if currentEmeralsItems ~= nil then
+			for _, emeralsItem in pairs(EmeralsItemsData) do
+				if emeralsItem.name then
+					if currentEmeralsItems[emeralsItem.name] == nil then
+						currentEmeralsItems[emeralsItem.name] = emeralsItem
+					end
+				end
+			end
 
+			playerEmeralsItems:SetAsync(player.UserId, currentEmeralsItems)
+			updateAchievementsClient(player,currentEmeralsItems)
+		else
+			playerEmeralsItems:SetAsync(player.UserId, EmeralsItemsData)
+			updateAchievementsClient(player, EmeralsItemsData)
+		end
+	end
+end
 
+-- 
+function updateEmeralsItemsClient(player, EmeralsItemsData)
+	for _, emeralsItem in pairs(EmeralsItemsData) do
+		local itemVar = Instance.new('StringValue')
+		itemVar.Name = emeralsItem.name
+		itemVar.Parent = player.EmeralsItems
+
+		local price = Instance.new('IntValue')
+		price.Name = 'price'
+		price.Value = emeralsItem.price
+		price.Parent = itemVar
+
+		local description = Instance.new('StringValue')
+		description.Name = 'description'
+		description.Value = emeralsItem.description
+		description.Parent = itemVar
+
+		local order = Instance.new('IntValue')
+		order.Name = 'order'
+		order.Value = emeralsItem.order
+		order.Parent = itemVar
+
+		local quanity = Instance.new('IntValue')
+		quanity.Name = 'quantity'
+		quanity.Value = emeralsItem.quanity
+		quanity.Parent = itemVar
+	end
+	
+	print("Emeral Items loaded!")
+end
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
 -- REMOTES
@@ -167,7 +222,7 @@ remotes.EmeralsPurchase.OnServerEvent:Connect(function(player, price, itemList)
 	end)
 	if success then
 		player.Emerals.Value = updatedEmerals
-		-- Code ph?n update items
+		
 	end
 end)
 
