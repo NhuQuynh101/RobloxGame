@@ -1,31 +1,51 @@
 local robuxItems = {
-	pack1 = {
+	Pack1 = {
 		name = 'Pack1',
 		order = 1,
 		price = 49,
-		emerals = 250,
+		value = 250,
 		extra = 0,
+		individual = 'Emerals'
 	},
-	pack2 = {
+	Pack2 = {
 		name = 'Pack2',
 		order = 2,
 		price = 99,
-		emerals = 250,
+		value = 500,
 		extra = 0.2,
+		individual = 'Emerals'
 	},
-	pack3 = {
+	Pack3 = {
 		name = 'Pack3',
 		order = 3,
 		price = 139,
-		emerals = 1300,
+		value = 1300,
 		extra = 0.3,
+		individual = 'Emerals'
 	},
-	pack4 = {
+	Pack4 = {
 		name = 'Pack4',
 		order = 4,
 		price = 399,
-		emerals = 2800,
+		value = 5000,
 		extra = 0.4,
+		individual = 'Emerals'
+	},
+	Revive = {
+		name = 'Revive',
+		order = 5,
+		price = 20,
+		value = 5,
+		extra = 0,
+		individual = 'Revive'
+	},
+	['3boosts'] = {
+		name = '3Boosts',
+		order = 5,
+		price = 20,
+		value = 5,
+		extra = 0,
+		individual = 'Emerals'
 	}
 }
 
