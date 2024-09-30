@@ -1,7 +1,8 @@
 -- Service
 local player = game.Players.LocalPlayer
-local tweenService = game.TweenService
-local replicatedStorage = game.ReplicatedStorage
+local tweenService = game:GetService("TweenService")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local MarketplaceService = game:GetService("MarketplaceService")
 
 -- Gui 
 local frames = player.PlayerGui:WaitForChild('Frames')
@@ -9,9 +10,14 @@ local shop = frames:WaitForChild('Store')
 local header = shop:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Header')
 local option1 = shop:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option1')
 local option2 = shop:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option2')
+local gold = option1:WaitForChild('Gold')
+local revive = option1:WaitForChild('Revive')
+local boost = option1:WaitForChild('3Boosts')
 
 -- ReplicatedStorage
+local remotes = replicatedStorage.Remotes
 local frameTrigger = require(replicatedStorage.JSON:WaitForChild('FrameTrigger'))
+local robuxItems = require(replicatedStorage.JSON:WaitForChild('RobuxItems'))
 
 --header.ChangeOption.MouseButton1Click:Connect(function()
 --	if header.ChangeOption.OnScreen.Value == 'Option1' then
@@ -36,4 +42,59 @@ local frameTrigger = require(replicatedStorage.JSON:WaitForChild('FrameTrigger')
 
 header.Close.MouseButton1Click:Connect(function()
 	frameTrigger.CloseFrame('Store')
+end)
+
+-- New function to handle selling items by Robux
+local function sellByRobux(itemId)
+    local item = robuxItems[itemId]
+    if item then
+        local success, errorMessage = pcall(function()
+			MarketplaceService:PromptProductPurchase(player, item.productId)
+		end)
+
+		if not success then
+			warn("Failed to prompt purchase:", errorMessage)
+		else
+			local playerId = player.UserId
+			local productId = item.productId
+			local success, errormessage = pcall(function()
+				MarketplaceService.PromptProductPurchaseFinished:Connect(function(playerId, productId, IsPurchased)
+					if IsPurchased == true then
+					onPurchaseSuccess(itemId)
+				end
+				end)
+			end)
+			if not success then
+				warn("Failed to connect to PromptProductPurchaseFinished:", errormessage)
+			end
+		end
+    end
+end
+
+-- Function to handle successful purchases
+function onPurchaseSuccess(itemId)
+	-- Call the server function to update the player's inventory
+	local success = remotes.UpdateRobuxItems:InvokeServer(itemId)
+            
+    if success then
+        print("Inventory updated successfully for item:", itemId)
+        -- You might want to update the client-side UI here to reflect the new inventory
+    else
+        warn("Failed to update inventory for item:", itemId)
+    end
+end
+
+-- Buy
+boost.Buy.MouseButton1Click:Connect(function()
+	sellByRobux('3Boosts')
+end)
+for _, item in pairs(gold:GetChildren()) do
+	if item:IsA('Frame') then
+		item.Buy.MouseButton1Click:Connect(function()
+			sellByRobux(item.Name)
+		end)
+	end
+end
+revive.Buy.MouseButton1Click:Connect(function()
+	sellByRobux('Revive')
 end)

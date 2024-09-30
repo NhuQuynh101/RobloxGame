@@ -5,7 +5,8 @@ local robuxItems = {
 		price = 49,
 		value = 250,
 		extra = 0,
-		individual = 'Emerals'
+		individual = 'Emerals',
+		productId = '1944345318',
 	},
 	Pack2 = {
 		name = 'Pack2',
@@ -13,7 +14,8 @@ local robuxItems = {
 		price = 99,
 		value = 500,
 		extra = 0.2,
-		individual = 'Emerals'
+		individual = 'Emerals',
+		productId = '1944346385',
 	},
 	Pack3 = {
 		name = 'Pack3',
@@ -21,7 +23,8 @@ local robuxItems = {
 		price = 139,
 		value = 1300,
 		extra = 0.3,
-		individual = 'Emerals'
+		individual = 'Emerals',
+		productId = '1944346386',
 	},
 	Pack4 = {
 		name = 'Pack4',
@@ -29,7 +32,8 @@ local robuxItems = {
 		price = 399,
 		value = 5000,
 		extra = 0.4,
-		individual = 'Emerals'
+		individual = 'Emerals',
+		productId = '1944346384',
 	},
 	Revive = {
 		name = 'Revive',
@@ -37,15 +41,17 @@ local robuxItems = {
 		price = 20,
 		value = 5,
 		extra = 0,
-		individual = 'Revive'
+		individual = 'Revive',
+		productId = '1944350408',
 	},
-	['3boosts'] = {
+	['3Boosts'] = {
 		name = '3Boosts',
-		order = 5,
-		price = 20,
-		value = 5,
+		order = 6,
+		price = 15,
+		value = 3,
 		extra = 0,
-		individual = 'Emerals'
+		individual = 'Emerals',
+		productId = '1944870638',
 	}
 }
 

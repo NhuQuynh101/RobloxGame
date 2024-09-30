@@ -8,13 +8,15 @@ local playerInventory = dataStoreService:GetDataStore('playerInventory')
 local playerEmerals = dataStoreService:GetDataStore('playerInventory', 'Emerals')
 local playerAchievement = dataStoreService:GetDataStore('playerInventory', 'Achievement')
 local playerEmeralsItems = dataStoreService:GetDataStore('playerInventory', 'EmeralsItems')
-local playerRobuxItems = dataStoreService:GetDataStore('playerInventory', 'RobuxItems')
+local playerRevive = dataStoreService:GetDataStore('playerInventory', 'Revive')
+local playerBoost = dataStoreService:GetDataStore('playerInventory', 'Boost')
 
 local attributeList = {
 	'Emerals',
 	'Achievement',
 	'EmeralsItems',
-	'RobuxItems',
+	'Revive',
+	'Boost',
 }
 
 --MAIN FUNCTION
@@ -26,8 +28,7 @@ function mainfunc (player)
 	getEmerals(player)
 	Achievements(player)
 	EmeralsItems(player)
-	
-	-- remotes
+
 end
 
 function playerDead (player)
@@ -217,6 +218,36 @@ function updateEmeralsItemsClient(player, EmeralsItemsData)
 	
 	print("Emeral Items loaded!")
 end
+
+-- Get Revive
+function revive(player)
+	local success, currentRevive = pcall(function()
+		return playerRevive:GetAsync(player.UserId)
+	end)
+	if success then
+		if currentRevive ~= nil then
+			player.Revive.Value = currentRevive
+		else
+			playerRevive:SetAsync(player.UserId, 0)
+			player.Revive.Value = 0
+		end
+	end
+end
+
+-- Get Boost
+function boost(player)
+	local success, currentBoost = pcall(function()
+		return playerBoost:GetAsync(player.UserId)
+	end)
+	if success then
+		if currentBoost ~= nil then
+			player.Boost.Value = currentBoost
+		else
+			playerBoost:SetAsync(player.UserId, 0)
+			player.Boost.Value = 0
+		end
+	end
+end
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
 -- REMOTES
@@ -247,6 +278,38 @@ remotes.EmeralsPurchase.OnServerEvent:Connect(function(player, price, itemList)
 		end
 	end
 end)
+
+remotes.UpdateRobuxItems.OnServerInvoke = function(player, itemId)
+	local robuxItemsData = require(ReplicatedStorage.JSON.RobuxItems)
+		if itemId == 'Revive' then
+			local success, updatedRevive = pcall(function()
+				return playerRevive:IncrementAsync(player.UserId, robuxItemsData['Revive'].value)
+			end)
+			if success then
+				player.Revive.Value = updatedRevive
+			end
+		elseif itemId == 'Boost' then
+			local success, updatedBoost = pcall(function()
+				return playerBoost:IncrementAsync(player.UserId, robuxItemsData['3Boosts'].value)
+			end)
+			if success then
+				player.Boost.Value = updatedBoost
+			end
+		else
+			local success, updatedEmerals = pcall(function()
+				return playerEmerals:IncrementAsync(player.UserId, robuxItemsData[itemId].value)
+			end)
+			if success then
+				player.Emerals.Value = updatedEmerals
+				remotes.UpdateEmerals:FireClient(player)
+			end
+		end
+		return true
+end
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+-- SUPPORT FUNCTION
 
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
