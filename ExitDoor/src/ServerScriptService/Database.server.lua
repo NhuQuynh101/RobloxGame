@@ -28,7 +28,8 @@ function mainfunc (player)
 	getEmerals(player)
 	Achievements(player)
 	EmeralsItems(player)
-
+	revive(player)
+	boost(player)
 end
 
 function playerDead (player)
@@ -280,6 +281,7 @@ remotes.EmeralsPurchase.OnServerEvent:Connect(function(player, price, itemList)
 end)
 
 remotes.UpdateRobuxItems.OnServerInvoke = function(player, itemId)
+	print(itemId)
 	local robuxItemsData = require(ReplicatedStorage.JSON.RobuxItems)
 		if itemId == 'Revive' then
 			local success, updatedRevive = pcall(function()
@@ -288,11 +290,12 @@ remotes.UpdateRobuxItems.OnServerInvoke = function(player, itemId)
 			if success then
 				player.Revive.Value = updatedRevive
 			end
-		elseif itemId == 'Boost' then
+		elseif itemId == '3Boosts' then
 			local success, updatedBoost = pcall(function()
 				return playerBoost:IncrementAsync(player.UserId, robuxItemsData['3Boosts'].value)
 			end)
 			if success then
+				print(updatedBoost)
 				player.Boost.Value = updatedBoost
 			end
 		else
