@@ -10,12 +10,14 @@ local emeralsItem = require(json.EmeralsItems)
 -- Gui 
 local frames = player.PlayerGui:WaitForChild('Frames')
 local preRunStore = frames:WaitForChild('PreRunStore')
+local header = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Header')
 local option1 = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option'):WaitForChild('Option1')
 local option2 = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option'):WaitForChild('Option2')
 local option4 = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option'):WaitForChild('Option4')
 local price = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Option'):WaitForChild('Price')
 local showEmerals = preRunStore:WaitForChild('Frame'):WaitForChild('Frame'):WaitForChild('Header'):WaitForChild('Frame'):WaitForChild('Emerals')
 local confirmButton = option4:WaitForChild('Button')
+local closeButton = header:WaitForChild('Close')
 
 -- Var 
 local itemList = {}
@@ -84,6 +86,10 @@ confirmButton.MouseButton1Click:Connect(function()
 			table.clear(itemList)
 		end
 	end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+	preRunStore.Visible = false
 end)
 
 ---------------------------------------------------------------

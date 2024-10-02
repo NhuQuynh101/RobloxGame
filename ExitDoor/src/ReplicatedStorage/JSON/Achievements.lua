@@ -54,4 +54,8 @@ local achievements = {
 	},
 }
 
+<<<<<<< HEAD
 return achievements
+=======
+return achievements
+>>>>>>> origin/main

@@ -1,4 +1,5 @@
-local replicatedStorage = game.ReplicatedStorage
+local replicatedStorage = game:GetService("ReplicatedStorage")	
+local players = game:GetService("Players")
 
 -- ReplicatedStorage
 local remotes = replicatedStorage.Remotes
