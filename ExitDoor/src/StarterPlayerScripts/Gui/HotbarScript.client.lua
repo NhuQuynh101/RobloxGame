@@ -3,6 +3,7 @@ local replicatedStorage = game.ReplicatedStorage
 
 -- ReplicatedStorage
 local remotes = replicatedStorage:WaitForChild('Remotes')
+
 local json = replicatedStorage:WaitForChild('JSON')
 
 -- Gui 
